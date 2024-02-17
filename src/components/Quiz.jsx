@@ -15,8 +15,10 @@ function Quiz() {
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
+        const categories = [18, 21, 30, 17, 9, 27, 11];
+        const category = categories[Math.floor(Math.random() * categories.length)];
         const res = await axios.get(
-          "https://opentdb.com/api.php?amount=10&category=17&difficulty=easy"
+          `https://opentdb.com/api.php?amount=10&category=${category}&difficulty=easy`
         );
         const { data } = res;
         if (data.results) {
@@ -33,6 +35,7 @@ function Quiz() {
         setIsLoading(false); // Set loading state to false if there's an error
       }
     };
+    
 
     const debouncedFetch = debounce(fetchQuestions, 500); // Debounce API call
     debouncedFetch();

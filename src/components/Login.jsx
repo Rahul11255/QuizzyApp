@@ -17,7 +17,7 @@ function LoginScreen() {
   return (
     <div className="login_container">
       <div className=" mb-12 w-80 rounded-md p-10 login_first_div">
-        <div className="text_email"> <p> Enter Your Name </p> </div>
+        <div className="text_email"> <p> Enter Your Good Name </p> </div>
         <div>
           <div >
             <input

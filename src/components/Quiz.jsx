@@ -7,8 +7,9 @@ function Quiz() {
   const { updateData } = useData();
   const [activeQuestion, setActiveQuestion] = useState(0);
   const [ans, setAns] = useState([]);
-  const [userData, setUserdata] = useState([]);
-  const [questions, setQuestions] = useState([]);
+  const [userData, setUserdata] = useState(null); // Initialize as null
+  const [questions, setQuestions] = useState(null); // Initialize as null
+  const [isLoading, setIsLoading] = useState(true); // Loading state
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -24,10 +25,12 @@ function Quiz() {
             answers: [...question.incorrect_answers, question.correct_answer],
           }));
           setQuestions(Result);
+          setUserdata(data.results);
+          setIsLoading(false); // Set loading state to false when data is fetched
         }
-        setUserdata(data.results);
       } catch (error) {
         console.error("Error fetching questions:", error);
+        setIsLoading(false); // Set loading state to false if there's an error
       }
     };
 
@@ -65,9 +68,9 @@ function Quiz() {
     ];
     setAns(updatedAns);
 
-    if (activeQuestion < userData.length - 1) {
+    if (activeQuestion < (userData?.length || 0) - 1) {
       setActiveQuestion(activeQuestion + 1);
-    } else if (activeQuestion === userData.length - 1) {
+    } else if (activeQuestion === (userData?.length || 0) - 1) {
       const updatedData = {
         userSelected: updatedAns,
         userData: userData,
@@ -84,6 +87,15 @@ function Quiz() {
     }
   };
 
+  // Render loading state while data is being fetched
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <p>Loading...</p>
+      </div>
+    );
+  }
+
   return (
     <>
       <div className="quizz_top_text text-center pl-[10px] bg-[#183f49b0] ">
@@ -95,16 +107,16 @@ function Quiz() {
         <div className="bg-[#0b1f227a] question_container">
           <div className="questioncount">Question {activeQuestion + 1}</div>
           <div className="question_Q">
-            <p>{userData[activeQuestion]?.question} </p>
+            <p>{userData?.[activeQuestion]?.question || "Waiting for data..."}</p>
           </div>
           <ul className="ul">
-            {questions[activeQuestion]?.answers?.map((option, index) => (
+            {questions?.[activeQuestion]?.answers?.map((option, index) => (
               <li
                 className="li"
                 key={index}
                 onClick={() => handleAnswerClick(option)}
               >
-                <button className="option_btn">{option}</button>
+                <button className="option_btn">{option || "Waiting for data..."}</button>
               </li>
             ))}
           </ul>
@@ -119,7 +131,7 @@ function Quiz() {
                 flexWrap: "wrap",
               }}
             >
-              {userData.map((item, index) => (
+              {userData?.map((item, index) => (
                 <div
                   key={index}
                   className="question_no"

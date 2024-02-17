@@ -210,8 +210,8 @@ input {
   padding:  15px 20px;
   width: 100%;
   font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 2.5px;
+  text-transform: capitalize;
+  letter-spacing: .5px;
   font-weight: 500;
   color: #000;
   background-color: #27e2d3;
